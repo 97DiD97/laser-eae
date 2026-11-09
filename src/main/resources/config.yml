@@ -1,0 +1,54 @@
+# ===== Ресурспак =====
+pack:
+  enabled: true
+  # ВСТАВЬ СЮДА ССЫЛКУ на eyesky-pack.zip (из GitHub Releases), в кавычках:
+  # url: "https://github.com/ТВОЙ_НИК/РЕПО/releases/download/latest/eyesky-pack.zip"
+  url: ""
+  required: true
+  prompt: "Ресурспак с текстурами глаза в небе"
+  # Только если у хостинга есть свободный второй порт (обычно НЕТ - оставь false):
+  serve-from-plugin: false
+  bind-address: "0.0.0.0"
+  port: 8765
+  public-host: "127.0.0.1"
+
+# ===== Глаз =====
+eye:
+  world: ""               # пусто = главный мир сервера
+  size: 6.0               # размер картинки глаза в блоках
+  collision-size: 4.0     # сторона невидимого куба-хитбокса (в блоках), им он врезается в блоки
+  view-range: 4.0         # множитель дальности прорисовки (64 блока * значение)
+  sky-height: 55          # высота над поверхностью, на которой он парит
+  orbit-radius: 35        # радиус кружения вокруг игрока-«якоря»
+  sky-speed: 0.5          # блоков за тик в небе
+  visit-speed: 0.4        # блоков за тик при спуске к игроку
+  visit-distance: 7.0     # на каком расстоянии от игрока он зависает
+  visit-min-seconds: 240  # как часто спускается к случайному игроку (от..до)
+  visit-max-seconds: 600
+  watch-min-seconds: 8    # сколько смотрит на игрока (от..до)
+  watch-max-seconds: 16
+  anchor-switch-seconds: 120   # как часто меняет игрока, над которым кружит
+  teleport-if-farther-than: 160  # если новый якорь дальше - просто переносится
+  sounds: true
+  preload-under-bedrock: true   # держать все текстуры эмоций на дне мира внутри бедрока (игроки их не видят)
+
+# ===== Лазер (/eye laser [игрок]) =====
+laser:
+  charge-seconds: 5     # отсчёт перед выстрелом
+  fire-seconds: 4       # сколько бьёт луч
+  radius: 7.0           # радиус выжигаемой воронки (блоков)
+  damage: 10.0          # урон живым в луче и воронке, раз в полсекунды (20 = 10 сердец)
+  beam-width: 1.8       # толщина луча
+  break-blocks: true    # выжигать блоки (false - только эффекты и урон). Приваты НЕ учитываются!
+  lining-thickness: 3.0 # толщина обугленного слоя вокруг воронки (блоков)
+  # Чем чаще блок в списке, тем чаще он попадает в стенки воронки.
+  crater-blocks:
+    - BLACKSTONE
+    - BLACKSTONE
+    - MAGMA_BLOCK
+    - MAGMA_BLOCK
+    - COAL_BLOCK
+    - SMOOTH_BASALT
+    - OBSIDIAN
+    - CRYING_OBSIDIAN
+    - NETHERRACK

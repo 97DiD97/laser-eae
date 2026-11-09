@@ -1,0 +1,14 @@
+name: FloatingEye
+version: '${version}'
+main: dev.eyesky.EyeSkyPlugin
+api-version: '26.1'
+description: Огромный материальный глаз с эмоциями, который летает в небе.
+commands:
+  eye:
+    description: Управление глазом
+    usage: /eye <visit|laser|shoot|emotion|summon|pack|status|reload>
+    permission: eyesky.admin
+permissions:
+  eyesky.admin:
+    description: Управление глазом
+    default: op
