@@ -49,6 +49,10 @@ public final class EyeCommand implements CommandExecutor, TabCompleter {
                 }
             }
             case "laser" -> {
+                if (args.length > 1 && args[1].equalsIgnoreCase("stop")) {
+                    msg(sender, eye.stopLaser() ? "Лазер остановлен." : "Лазер сейчас не работает.", NamedTextColor.GREEN);
+                    return true;
+                }
                 Player at = null;
                 if (args.length > 1) {
                     at = Bukkit.getPlayerExact(args[1]);
@@ -58,7 +62,7 @@ public final class EyeCommand implements CommandExecutor, TabCompleter {
                     }
                 }
                 if (eye.laserBusy()) {
-                    msg(sender, "Лазер уже работает.", NamedTextColor.RED);
+                    msg(sender, "Лазер уже работает. Сбросить: /eye laser stop. Состояние: /eye status", NamedTextColor.RED);
                 } else if (!eye.startLaser(at)) {
                     msg(sender, "Не получилось: глаз ещё не появился или под ним нет земли.", NamedTextColor.RED);
                 } else {

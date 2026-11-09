@@ -141,8 +141,23 @@ public final class Laser {
         eye.visual(1.0, 0.0);
     }
 
+    public String phaseName() {
+        return phase + " t=" + t;
+    }
+
+    private void log(String s) {
+        plugin.getLogger().info("[лазер] " + s);
+    }
+
+    private int totalTicks;
+
     private void tick() {
         try {
+            if (++totalTicks > 400 + chargeTicks + fireTicks + FADE_TICKS + 200) {   // страховка от зависания
+                log("таймаут, лазер остановлен");
+                finish();
+                return;
+            }
             Vector p = eye.position();
             if (p == null || eye.world() != world) { finish(); return; }
             eyePos = p;
@@ -190,6 +205,7 @@ public final class Laser {
 
     private void beginCharge() {
         phase = Phase.CHARGE;
+        log(String.format("заряд, глаз в %.0f %.0f %.0f, земля на y=%.1f", eyePos.getX(), eyePos.getY(), eyePos.getZ(), impact.getY()));
         t = -1;                                   // tick() сразу прибавит единицу
         eye.setHold(point != null ? new Vector(point.getX(), eyePos.getY(), point.getZ()) : eyePos.clone());   // зависает на месте
 
@@ -284,6 +300,7 @@ public final class Laser {
 
     private void beginFire() {
         phase = Phase.FIRE;
+        log("выстрел");
         t = -1;
         computeImpact();
         cx = impact.getBlockX();
@@ -377,6 +394,7 @@ public final class Laser {
 
     private void beginFade() {
         phase = Phase.FADE;
+        log("затухание");
         t = -1;
         if (breakBlocks) scorchRim();
         sound(impact, Sound.BLOCK_FIRE_EXTINGUISH, 8f, 0.6f);

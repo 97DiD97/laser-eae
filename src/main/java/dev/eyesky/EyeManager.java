@@ -590,11 +590,27 @@ public final class EyeManager {
         if (point != null && !point.getWorld().equals(world)) return false;
         Laser l = new Laser(plugin, this, at, point);
         laser = l;
-        if (!l.start()) { laser = null; hold = null; return false; }
+        try {
+            if (!l.start()) { l.abort(); laser = null; hold = null; return false; }
+        } catch (Throwable t) {
+            plugin.getLogger().log(Level.WARNING, "Не удалось запустить лазер", t);
+            l.abort();
+            laser = null;
+            hold = null;
+            return false;
+        }
         return true;
     }
 
     public boolean laserBusy() { return laser != null; }
+
+    public boolean stopLaser() {
+        if (laser == null) { hold = null; return false; }
+        laser.abort();
+        laser = null;
+        hold = null;
+        return true;
+    }
 
     void laserEnded(Laser l) { if (laser == l) laser = null; }
 
@@ -627,8 +643,9 @@ public final class EyeManager {
 
     public String describe() {
         if (pos == null) return "глаз ещё не появился (на сервере нет подходящих игроков)";
-        return String.format("состояние=%s, эмоция=%s, позиция=%.0f %.0f %.0f (%s)",
-                state, shown, pos.getX(), pos.getY(), pos.getZ(), world.getName());
+        return String.format("состояние=%s, эмоция=%s, позиция=%.0f %.0f %.0f (%s), лазер=%s",
+                state, shown, pos.getX(), pos.getY(), pos.getZ(), world.getName(),
+                laser == null ? "нет" : laser.phaseName());
     }
 
     // =====================================================================================
